@@ -34,7 +34,9 @@ function generateBingo() {
 
     shuffle(bingoitems);
     
-    generateURL(bingoitems);
+    var newURL = generateURL(bingoitems);
+
+    window.location.replace("bingo.html" + newURL)
     // console.log(bingoitems);
 }
 
@@ -51,8 +53,54 @@ function shuffle(array) {
 
 function generateURL(bingoitems) {
     var bingotext = "?" + bingoitems.reduce((acc, val, index) => {
-        return acc + "name-" + index + "=" + encodeURI(val) + "&";
+        val = encodeURI(val).replaceAll('&','%26')
+        return acc + "name-" + index + "=" + val + "&";
     }, "");
-    console.log(bingotext);
-    return bingotext;
+    return bingotext.slice(0, -1);
+}
+
+/////////////////////////////////////////////////
+
+function parseUrl(){
+    var url = window.location.href;
+    var texts = [];
+    texts = url.split('?',2)[1].split("&").map(x=>decodeURI(x).split("=", 2)[1]);
+    return texts;
+}
+
+function showBingo(){
+    bingoelements = parseUrl();
+    var id = 0;
+
+
+    var grid = document.getElementById("bingo-grid");
+    grid.querySelectorAll('*').forEach(n => n.remove());
+    
+    var size = Math.sqrt(bingoelements.length);
+
+    window.isMarked = new Array(bingoelements.length).fill(0);
+
+    for(let i = 0; i < size; i++) {
+        var row = document.createElement("div");
+        row.setAttribute("class", "bingo-grid-row");
+        for(let j = 0; j < size; j++) {
+            var child = document.createElement("div");
+            var text = document.createElement("p");
+            text.setAttribute("id", "element-" + id);
+            text.innerText = bingoelements[id];
+            child.setAttribute("class", "bingo-grid-element");
+            child.setAttribute("onclick", `elementToggle(${id})`);
+            child.appendChild(text);
+            row.appendChild(child);
+            id++;
+        }
+        grid.appendChild(row);
+    }
+
+}
+
+function elementToggle(id){
+    window.isMarked[id] = !window.isMarked[id];
+    var bgcolor = window.isMarked[id] ? "blue" : "white" ;
+    document.getElementById(`element-${id}`).parentElement.style.backgroundColor = bgcolor;  
 }
