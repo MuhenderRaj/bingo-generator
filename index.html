@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>
+            Bingo Generator!
+        </title>
+
+        <link rel="stylesheet" href="app.css" />
+
+        <script src="script.js"> </script>
+    </head>
+    <body>
+        <div id="size-input">
+            Choose your bingo size: 
+            <form onsubmit="createBingo();return false">
+                <input id="bingo-size" type="number" min="0" max="10"/>
+                <input type="submit" value="Submit"/>
+            </form>
+        </div>
+        <div id="bingo-grid">
+
+        </div>
+    </body>
+</html>

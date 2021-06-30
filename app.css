@@ -1,0 +1,15 @@
+body{
+    margin: 0;
+}
+.bingo-grid{
+    display:grid
+}
+
+.bingo-grid-element{
+    width:100px;
+    height:100px;
+}
+
+.bingo-grid-row{
+    width: 100%;
+}
