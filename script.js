@@ -53,7 +53,7 @@ function shuffle(array) {
 
 function generateURL(bingoitems) {
     var bingotext = "?" + bingoitems.reduce((acc, val, index) => {
-        val = encodeURI(val).replaceAll('&','%26')
+        val = encodeURI(val).replaceAll('&','%26');
         return acc + "name-" + index + "=" + val + "&";
     }, "");
     return bingotext.slice(0, -1);
@@ -64,7 +64,7 @@ function generateURL(bingoitems) {
 function parseUrl(){
     var url = window.location.href;
     var texts = [];
-    texts = url.split('?',2)[1].split("&").map(x=>decodeURI(x).split("=", 2)[1]);
+    texts = url.split('?',2)[1].split("&").map(x=>decodeURI(x).split(/=(.+)/)[1].replaceAll('%26', '&'));
     return texts;
 }
 
