@@ -23,21 +23,33 @@ function createBingo() {
     }
 }
 
-function generateBingo() {
-    
-    var bingoitems = [];
+function generateURL(bingoitems) {
+    var bingotext = "?" + bingoitems.reduce((acc, val, index) => {
+        val = encodeURI(val).replaceAll('&','%26');
+        return acc + "name-" + index + "=" + val + "&";
+    }, "");
+    return "bingo.html"+bingotext.slice(0, -1);
+}
 
+function generateBingo() {
+    var bingoitems = [];
     for(let i = 0; i < window.size*window.size; i++){
         var item = document.getElementById("element-" + i).value;
         bingoitems.push(item);
     }
-
     shuffle(bingoitems);
-    
-    var newURL = generateURL(bingoitems);
+    return generateURL(bingoitems);
+}
 
-    window.location.replace("bingo.html" + newURL)
-    // console.log(bingoitems);
+function goToBingo(){
+    newURL = generateBingo()
+    window.location.replace(newURL)
+}
+
+function shareBingo(){
+    locationURL =  window.location.href.replace(/[^/]*$/, '')
+    shareURL = locationURL+generateBingo()
+    console.log(shareURL) 
 }
 
 function shuffle(array) {
@@ -49,14 +61,6 @@ function shuffle(array) {
         array[randomIndex], array[currentIndex]];
     }
     return array;
-}
-
-function generateURL(bingoitems) {
-    var bingotext = "?" + bingoitems.reduce((acc, val, index) => {
-        val = encodeURI(val).replaceAll('&','%26');
-        return acc + "name-" + index + "=" + val + "&";
-    }, "");
-    return bingotext.slice(0, -1);
 }
 
 /////////////////////////////////////////////////
