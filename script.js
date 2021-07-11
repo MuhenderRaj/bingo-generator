@@ -37,7 +37,7 @@ function generateBingo() {
         var item = document.getElementById("element-" + i).value;
         bingoitems.push(item);
     }
-    shuffle(bingoitems);
+    bingoitems = shuffle(bingoitems);
     return generateURL(bingoitems);
 }
 
@@ -69,20 +69,32 @@ function parseUrl(){
     var url = window.location.href;
     var texts = [];
     texts = url.split('?',2)[1].split("&").map(x=>decodeURI(x).split(/=(.+)/)[1].replaceAll('%26', '&'));
-    return texts;
+    if(! ("hasSeen" in localStorage)){
+        texts = shuffle(texts);
+        localStorage.hasSeen = true;
+        for(let i = 0; i < texts.length; i++){
+            localStorage.setItem(`item-${i}`, texts[i]);
+        }
+    }
+    return texts.length
 }
 
 function showBingo(){
-    bingoelements = parseUrl();
-    var id = 0;
+    var bingoSize = parseUrl();
+    var bingoElements = [];
 
+    for(let i=0; i<bingoSize; i++){
+        bingoElements.push(localStorage.getItem(`item-${i}`));
+    }
+
+    var id = 0;
 
     var grid = document.getElementById("bingo-grid");
     grid.querySelectorAll('*').forEach(n => n.remove());
     
-    var size = Math.sqrt(bingoelements.length);
+    var size = Math.sqrt(bingoElements.length);
 
-    window.isMarked = new Array(bingoelements.length).fill(0);
+    window.isMarked = new Array(bingoElements.length).fill(0);
 
     for(let i = 0; i < size; i++) {
         var row = document.createElement("div");
@@ -91,7 +103,7 @@ function showBingo(){
             var child = document.createElement("div");
             var text = document.createElement("p");
             text.setAttribute("id", "element-" + id);
-            text.innerText = bingoelements[id];
+            text.innerText = bingoElements[id];
             child.setAttribute("class", "bingo-grid-element");
             child.setAttribute("onclick", `elementToggle(${id})`);
             child.appendChild(text);
