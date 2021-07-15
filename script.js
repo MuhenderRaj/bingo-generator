@@ -1,3 +1,15 @@
+var firebaseConfig = {
+    apiKey: "AIzaSyCpDBE4pHGMuMWIc9m3lMCHsxPpxCDUbOs",
+    authDomain: "bingo-generator.firebaseapp.com",
+    projectId: "bingo-generator",
+    storageBucket: "bingo-generator.appspot.com",
+    messagingSenderId: "491227835346",
+    appId: "1:491227835346:web:885107eca39ca6b861360b",
+    measurementId: "G-3P47X02M58"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
 function createBingo() {
     window.size = document.getElementById("bingo-size").value;
     
